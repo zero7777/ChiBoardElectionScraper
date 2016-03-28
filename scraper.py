@@ -18,5 +18,10 @@ def scrapeElection():
 
     return
 
+def getElectionCodes():
+    #Could scrape, but instead, need to manually get
+    
+
 if __name__== "__main__":
-    scrapeElection()
+    #scrapeElection()
+
