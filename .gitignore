@@ -60,3 +60,9 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+#Scraper Output
+test.csv
+
+#Lock files excel style
+*.csv#
