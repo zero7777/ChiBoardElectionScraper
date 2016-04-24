@@ -5,7 +5,15 @@ from bs4 import BeautifulSoup
 def getPayload(elec_code, D3, t):
     return None
 
-def scrapeElection():
+def scrapeWardElection(elec_code, ward, race_number):
+
+    url = "http://www.chicagoelections.com/en/pctlevel3.asp?Ward=" + str(ward) + "&elec_code=" + str(elec_code) + "&race_number=" + str(race_number)
+
+    response = requests.get(url) #todo check dis function to be safe
+
+    return response.text
+
+def scrapeElection(elec_code):
     #According to the website, the form takes a POST request to GET data. WutFace
     payload = {
         'VTI-GROUP': 0,
@@ -13,10 +21,9 @@ def scrapeElection():
         'flag':      1,
         'B1':        'View The Results'
     }
-    url = "http://www.chicagoelections.com/en/"
-    action = "wdlevel3.asp?elec_code=" + "5" #6 = 2016 Primary Republican
+    url = "http://www.chicagoelections.com/en/wdlevel3.asp?elec_code=" + str(elec_code) #6 = 2016 Primary Republican
     #test
-    url = url + action
+    url = url
     response = requests.post(url, data=payload)
 
     return response.text
@@ -54,5 +61,5 @@ def convertHTMLToCSV(html):
     return
 
 if __name__ == "__main__":
-    testText = scrapeElection()
+    testText = scrapeElection("5")
     convertHTMLToCSV(testText)
