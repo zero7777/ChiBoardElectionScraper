@@ -62,7 +62,7 @@ target/
 .ipynb_checkpoints
 
 #Scraper Output
-test.csv
+*.csv
 
 #Lock files excel style
 *.csv#

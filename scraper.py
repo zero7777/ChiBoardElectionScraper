@@ -10,7 +10,8 @@ def scrapeWardElection(elec_code, ward, race_number):
     url = "http://www.chicagoelections.com/en/pctlevel3.asp?Ward=" + str(ward) + "&elec_code=" + str(elec_code) + "&race_number=" + str(race_number)
 
     response = requests.get(url) #todo check dis function to be safe
-
+    print url
+    print response.text
     return response.text
 
 def scrapeElection(elec_code):
@@ -25,7 +26,6 @@ def scrapeElection(elec_code):
     #test
     url = url
     response = requests.post(url, data=payload)
-
     return response.text
 
 def getElectionCodes():
@@ -33,7 +33,7 @@ def getElectionCodes():
     pass
     return    
 
-def convertHTMLToCSV(html):
+def convertHTMLToCSV(html,file_name):
     """
     Given HTML document as a string, write to a CSV file with the name of the
     table as the CSV file's name.
@@ -44,9 +44,9 @@ def convertHTMLToCSV(html):
     ward_table = False 
     #ward tables have 1 less row of padding both top and bot, for use later
     first = True
-    f = open('test.csv','w')
-    w = csv.writer(f,delimiter=';')
-    for row in rows[3:]:
+    f = open(file_name,'w')
+    w = csv.writer(f,delimiter=',') #Todo, change quote specification
+    for row in rows[3:-2]:
         columns = row.find_all("td")
         row = []
         string = ""
@@ -58,8 +58,11 @@ def convertHTMLToCSV(html):
         #print "\n--------------------------------"
         w.writerow(row)
         print string
+    f.close()
     return
 
 if __name__ == "__main__":
     testText = scrapeElection("5")
-    convertHTMLToCSV(testText)
+    convertHTMLToCSV(testText, "election.csv")
+    getText = scrapeWardElection(5,1,10)
+    convertHTMLToCSV(getText,"ward.csv")
