@@ -33,32 +33,28 @@ def getElectionCodes():
     pass
     return    
 
+def writeCSVRows(rows,file_name):
+    f = open(file_name,'w')
+    w = csv.writer(f,delimiter=',')
+    count = 0
+    for row in rows:
+        w.writerow(row)
+        count += 1
+    f.close()
+    print "Wrote ", count, " rows to ", file_name
+    return
+
 def convertHTMLToCSV(html,file_name):
     """
     Given HTML document as a string, write to a CSV file with the name of the
     table as the CSV file's name.
     """
     soup = BeautifulSoup(html, "html.parser")
-    rows = soup.find("table").find_all("tr")
+    html_rows = soup.find("table").find_all("tr")
+    #MOTHER FUCKING LIST COMPREHENSION WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+    rows = [[c.get_text() for c in r.find_all("td")] for r in html_rows]
 
-    ward_table = False 
-    #ward tables have 1 less row of padding both top and bot, for use later
-    first = True
-    f = open(file_name,'w')
-    w = csv.writer(f,delimiter=',') #Todo, change quote specification
-    for row in rows[3:-2]:
-        columns = row.find_all("td")
-        row = []
-        string = ""
-        for column in columns:
-            #print column.get_text("|", strip=True), "|"
-            #print column.string, ";",
-            row.append(column.get_text())
-            string = string + column.get_text() + ";"
-        #print "\n--------------------------------"
-        w.writerow(row)
-        print string
-    f.close()
+    writeCSVRows(rows[3:-2],file_name)
     return
 
 if __name__ == "__main__":
